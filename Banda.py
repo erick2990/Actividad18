@@ -18,7 +18,13 @@ class BandaEscolar(Participante):
     def __init__(self,ficha, nombre, institu,  puntajes):
         super().__init__(ficha, nombre, institu)
         self.__categoria = ""
-        self.__puntajes = {} #Diccionario privado al que solo accede por su ficha
+        self.__puntajes = {
+            "ritmo":0,
+            "uniformidad": 0,
+            "coreografia":0,
+            "alineacion": 0,
+            "puntualidad":0
+        } #Diccionario privado al que solo accede por su ficha
         self.total = 0
         self.promedio = 0
 
