@@ -1,10 +1,14 @@
 import tkinter as tk
-
+import Banda
 class ConcursoBandasApp:
+
+
     def __init__(self):
         self.ventana = tk.Tk()
         self.ventana.title("Concurso de Bandas - Quetzaltenango")
         self.ventana.geometry("500x300")
+        self.dinamica = Banda.Concurso()
+
 
         self.menu()
 
@@ -30,6 +34,7 @@ class ConcursoBandasApp:
         barra.add_cascade(label="Opciones", menu=opciones)
         self.ventana.config(menu=barra)
 
+
     def inscribir_banda(self):
         print("Se abrió la ventana: Inscribir Banda")
         ventana_inscribir = tk.Toplevel(self.ventana)
@@ -51,7 +56,7 @@ class ConcursoBandasApp:
         categoria_text = tk.Label(fondo_ins, text="Seleccione la categoria: ",bg="#000000" , fg="#40E0D0", font=("Arial", 14, "bold"))
         categoria_text.grid(row=4, column=5, padx=10, pady=5)
         opcion = tk.StringVar() #la categoria se guardara en esta variable con el metodo get
-        opcion.set("Categorías") #Es el mensaje que se guarda en este boton de submenu
+        #opcion.set("Categorías") #Es el mensaje que se guarda en este boton de submenu
         listado = ["Primaria", "Básico", "Diversificado"] #Lista para el submenu
         menu_categoria = tk.OptionMenu(fondo_ins, opcion, *listado)
         menu_categoria.grid(row=4, column=10, padx=10, pady=5)
@@ -59,35 +64,58 @@ class ConcursoBandasApp:
         adicional = ", ".join(criterios)
         aviso_importante = tk.Label(fondo_ins,text=f"Categorias a calificar: \n{adicional}",bg="#000000", fg="#FFFF00", font=("Arial", 12, "bold"))
         aviso_importante.grid(row=5, column=10, padx=0, pady=5)
-        guardar = tk.Button(fondo_ins,text="Guardar",bg="#D3D3D3", fg="#000000",  font=("Arial", 12, "bold"),)
+
+        def enviar_datos():
+            ficha = ficha_entrada.get()
+            nombre = nombre_entrada.get()
+            instituto = instituto_entrada.get()
+            ca  = opcion.get()
+            if self.dinamica.inscribir_banda(ficha, nombre, instituto, ca):
+                aviso_error.config(text="Datos guardados de forma exitosa")
+                ficha_entrada.delete(0, tk.END)
+                nombre_entrada.delete(0, tk.END)
+                instituto_entrada.delete(0, tk.END)
+
+            else:
+                aviso_error.config(text="Verificar entradas")
+
+        guardar = tk.Button(fondo_ins,text="Guardar", command=enviar_datos,bg="#D3D3D3", fg="#000000",  font=("Arial", 12, "bold"))
         guardar.grid(row=6, column=10, padx=10, pady=7)
         aviso_error = tk.Label(fondo_ins, text="Guardando", bg="#000000", fg="#FF0000", font=("Arial", 12, "bold"))
         aviso_error.grid(row=6, column=5, padx=10, pady=5)
 
 
 
+
+
     def registrar_evaluacion(self):
+
+
         print("Se abrió la ventana: Registrar Evaluación")
         ventana_registro = tk.Toplevel(self.ventana)
         ventana_registro.title("Registrar Evaluación")
-        fondo_reg = tk.Label(ventana_registro, bg="#000000", padx=300, pady=300)
+        fondo_reg = tk.Frame(ventana_registro, bg="#000000", padx=100, pady=200)
         fondo_reg.pack()
         id_banda_texto = tk.Label(fondo_reg, text="Ingrese el ID de la banda: ", font=("Arial", 12, "bold"), bg="#000000", fg="#40E0D0")
         id_banda_texto.grid(row=1, column=5, padx=10, pady=20, sticky="w" )
         id_banda_entrada = tk.Entry(fondo_reg)
         id_banda_entrada.grid(row=1, column=10, padx=10, pady=5)
-        buscar = tk.Button(fondo_reg, text="Buscar", font=("Arial", 12, "bold"), bg="#D3D3D3", fg="#000000" )
+
+        def buscar_evaluar():
+            if self.dinamica.exitencia(id_banda_entrada.get()):
+                fondo_reg.destroy() #Se destruye el frame donde se realizo la busqueda y se apertura uno nuevo en esta venta
+                frame_puntos = tk.Frame(ventana_registro, bg="#000000", padx=100, pady=200)
+                frame_puntos.pack()
+                print('Ventana para ingresar los parametros y enviarlos')
+
+
+            else:
+                aviso_error.config(text="ID no encontrado")
+
+        buscar = tk.Button(fondo_reg, text="Buscar", command=buscar_evaluar,font=("Arial", 12, "bold"), bg="#D3D3D3", fg="#000000")
         buscar.grid(row=2, column=10, padx=10, pady=10)
-        #por medio del boton se ejecutara un metodo propio de una clase del archivo banda donde retorne True o false
-        x=3
-        if x>5:
-            print('Si el codigo esta bien entonces procede a todo esto')
-
-        else:
-            error_aviso = tk.Label(fondo_reg, text="No hay registros intente nuevamente", font=("Arial", 12, "bold"), bg="#000000", fg="#FF0000")
-            error_aviso.grid(row=2, column=5, padx=5, pady=20)
-            id_banda_entrada.delete(0, tk.END)
-
+        aviso_error = tk.Label(fondo_reg, bg="#000000", fg="red", font=("Arial", 12, "bold"))
+        aviso_error.grid(row = 2, column=5, padx=10, pady=20)
 
 
 
@@ -95,8 +123,16 @@ class ConcursoBandasApp:
         print("Se abrió la ventana: Listado de Bandas")
         ventana_listado = tk.Toplevel(self.ventana)
         ventana_listado.title("Listado de Bandas")
-        fondo_lista = tk.Label(ventana_listado, bg="#000000", padx=300, pady=300)
+        ventana_listado.config(bg="black")
+        fondo_lista = tk.Frame(ventana_listado, bg="#000000", padx=100, pady=200)
         fondo_lista.pack()
+        cantidad_bandas =1
+        for id, banda in self.dinamica.participantes.items():
+            banda_tmp = tk.Label(fondo_lista, text=f"{banda}", bg="#000000", fg="#FFA500", font=("Arial", 12, "bold"), justify="left" )
+            banda_tmp.grid(row=cantidad_bandas, column=0, padx=0, sticky="w")
+            cantidad_bandas+=1
+
+
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")

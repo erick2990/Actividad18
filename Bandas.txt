@@ -1,0 +1,4 @@
+1812,Latin Band R,ITIVQ,Diversificado
+1815,latina,ITIVQ,Basico
+1910,Buble,ESFAQ,Diversificado
+1912,March,Patria,Diversificado
