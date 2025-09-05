@@ -107,6 +107,8 @@ class ConcursoBandasApp:
                 frame_puntos = tk.Frame(ventana_registro, bg="#000000", padx=100, pady=200)
                 frame_puntos.pack()
                 print('Ventana para ingresar los parametros y enviarlos')
+                nota_texto = tk.Label(frame_puntos, text="Ingrese los datos", bg="#000000", fg="#D3D3D3", font=("Arial", 12, "bold"))
+                nota_texto.grid(row=1, column=5, padx=20, pady=5)
 
 
             else:
