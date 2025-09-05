@@ -31,9 +31,14 @@ class BandaEscolar(Participante):
         else:
             print(" Se requiere una categoría válida: Primaria, Básico o Diversificado")
 
-    def registrar_puntajes(self):
+    def registrar_puntajes(self, criterio, puntaje):
         fin_registro =True
-        while fin_registro:
-            print()
+        #Debe seleccionar o ingresar el ID de la banda apra poder calificarlo, en este espacio se despliega un menu
+        #Con espacios para poder asignar las notas y luego cargarla
+
+
+class Concurso:
+    #Gestion del concurso cuando se puntean las bandas y se hacen los ranking y elimintorias
+    pass
 
 

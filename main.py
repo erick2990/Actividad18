@@ -32,19 +32,60 @@ class ConcursoBandasApp:
 
     def inscribir_banda(self):
         print("Se abrió la ventana: Inscribir Banda")
-        tk.Toplevel(self.ventana).title("Inscribir Banda")
+        ventana_inscribir = tk.Toplevel(self.ventana)
+        ventana_inscribir.title("Inscribir Banda")#esta ventana es la secundaria sobre la cual se trabaja
+        fondo_ins = tk.Label(ventana_inscribir, bg="#000000", padx=300, pady=300)
+        fondo_ins.pack()
+        ficha_text = tk.Label(fondo_ins, text="Ficha: ", bg="#000000" , fg="#FFD700", font=("Arial", 14, "bold"))
+        ficha_text.grid(row = 1, column= 5, padx=10, pady=20, sticky="w")
+        ficha_entrada = tk.Entry(fondo_ins) #Guarda
+        ficha_entrada.grid(row = 1, column = 10, padx=10, pady=5)
+        nombre_text = tk.Label(fondo_ins, text="Nombre: ", bg="#000000" , fg="#FFD700", font=("Arial", 14, "bold"))
+        nombre_text.grid(row=2, column=5, padx=10, pady=20, sticky="w")
+        nombre_entrada = tk.Entry(fondo_ins) #Guarda
+        nombre_entrada.grid(row=2, column=10, padx=10, pady=5)
+        instituto_text = tk.Label(fondo_ins, text="Instituto: ", bg="#000000", fg="#FFD700", font=("Arial", 14, "bold"))
+        instituto_text.grid(row=3, column=5, padx=10, pady=20, sticky="w")
+        instituto_text = tk.Entry(fondo_ins)  # Guarda
+        instituto_text.grid(row=3, column=10, padx=10, pady=5)
+        categoria_text = tk.Label(fondo_ins, text="Seleccione la categoria: ",bg="#000000" , fg="#FFD700", font=("Arial", 14, "bold"))
+        categoria_text.grid(row=4, column=5, padx=10, pady=5)
+        opcion = tk.StringVar() #la categoria se guardara en esta variable con el metodo get
+        opcion.set("Categorías") #Es el mensaje que se guarda en este boton de submenu
+        listado = ["Primaria", "Básico", "Diversificado"] #Lista para el submenu
+        menu_categoria = tk.OptionMenu(fondo_ins, opcion, *listado)
+        menu_categoria.grid(row=4, column=10, padx=10, pady=5)
+
+
+
+
+
+
+
+
+
 
     def registrar_evaluacion(self):
         print("Se abrió la ventana: Registrar Evaluación")
-        tk.Toplevel(self.ventana).title("Registrar Evaluación")
+        ventana_registro = tk.Toplevel(self.ventana)
+        ventana_registro.title("Registrar Evaluación")
+        fondo_reg = tk.Label(ventana_registro, bg="#000000", padx=300, pady=300)
+        fondo_reg.pack()
 
     def listar_bandas(self):
         print("Se abrió la ventana: Listado de Bandas")
-        tk.Toplevel(self.ventana).title("Listado de Bandas")
+        ventana_listado = tk.Toplevel(self.ventana)
+        ventana_listado.title("Listado de Bandas")
+        fondo_lista = tk.Label(ventana_listado, bg="#000000", padx=300, pady=300)
+        fondo_lista.pack()
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")
-        tk.Toplevel(self.ventana).title("Ranking Final")
+        ventana_ranking = tk.Toplevel(self.ventana)
+        ventana_ranking.title("Ranking Final")
+        fondo_ranking  = tk.Label(ventana_ranking, bg="#000000", padx=300, pady=300)
+        fondo_ranking.pack()
+
 
 
 if __name__ == "__main__":
