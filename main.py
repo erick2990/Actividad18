@@ -46,8 +46,8 @@ class ConcursoBandasApp:
         nombre_entrada.grid(row=2, column=10, padx=10, pady=5)
         instituto_text = tk.Label(fondo_ins, text="Instituto: ", bg="#000000", fg="#40E0D0", font=("Arial", 14, "bold"))
         instituto_text.grid(row=3, column=5, padx=10, pady=20, sticky="w")
-        instituto_text = tk.Entry(fondo_ins)  # Guarda
-        instituto_text.grid(row=3, column=10, padx=10, pady=5)
+        instituto_entrada = tk.Entry(fondo_ins)  # Guarda
+        instituto_entrada.grid(row=3, column=10, padx=10, pady=5)
         categoria_text = tk.Label(fondo_ins, text="Seleccione la categoria: ",bg="#000000" , fg="#40E0D0", font=("Arial", 14, "bold"))
         categoria_text.grid(row=4, column=5, padx=10, pady=5)
         opcion = tk.StringVar() #la categoria se guardara en esta variable con el metodo get
@@ -72,6 +72,24 @@ class ConcursoBandasApp:
         ventana_registro.title("Registrar Evaluación")
         fondo_reg = tk.Label(ventana_registro, bg="#000000", padx=300, pady=300)
         fondo_reg.pack()
+        id_banda_texto = tk.Label(fondo_reg, text="Ingrese el ID de la banda: ", font=("Arial", 12, "bold"), bg="#000000", fg="#40E0D0")
+        id_banda_texto.grid(row=1, column=5, padx=10, pady=20, sticky="w" )
+        id_banda_entrada = tk.Entry(fondo_reg)
+        id_banda_entrada.grid(row=1, column=10, padx=10, pady=5)
+        buscar = tk.Button(fondo_reg, text="Buscar", font=("Arial", 12, "bold"), bg="#D3D3D3", fg="#000000" )
+        buscar.grid(row=2, column=10, padx=10, pady=10)
+        #por medio del boton se ejecutara un metodo propio de una clase del archivo banda donde retorne True o false
+        x=3
+        if x>5:
+            print('Si el codigo esta bien entonces procede a todo esto')
+
+        else:
+            error_aviso = tk.Label(fondo_reg, text="No hay registros intente nuevamente", font=("Arial", 12, "bold"), bg="#000000", fg="#FF0000")
+            error_aviso.grid(row=2, column=5, padx=5, pady=20)
+            id_banda_entrada.delete(0, tk.END)
+
+
+
 
     def listar_bandas(self):
         print("Se abrió la ventana: Listado de Bandas")
