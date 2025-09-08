@@ -1,9 +1,6 @@
 from functools import partial
 from unicodedata import unidata_version
-
 from apport.fileutils import core_dir
-
-
 class Participante:
     def __init__(self, ficha,nombre, institu):
         self.__ficha = ficha
@@ -60,7 +57,30 @@ class BandaEscolar(Participante):
         self.set_puntajes(ritmo, uniformidad, coreografia, alineacion, puntualidad)
         print('Registro actualizado')
 
+    def __str__(self):
+        return (
+            f"Ficha: {self.get_ficha()} | "
+            f"Banda: {self.get_nombre()} | "
+            f"Institución: {self.get_instuticion()} | "
+            f"Categoría: {self.get_categoria()} | "
+            f"Total: {self.total} | Promedio: {self.promedio:.2f}"
+            )
 
+    def msotrar(self):
+        puntajes_texto = ", ".join([f"{k.capitalize()}: {v}" for k, v in self.__puntajes.items()])
+        return (
+            f"Ficha: {self.get_ficha()} | Banda: {self.get_nombre()} | Categoría: {self.get_categoria()} | Total: {self.total} | Promedio: {self.promedio:.2f} "
+            f"\nPuntajes: [{puntajes_texto}] | "
+        )
+
+def quicksort_descendente(lista):
+    if len(lista) <= 1:
+        return lista
+    else:
+        pivote = lista[0]
+        mayores = [x for x in lista[1:] if x.promedio >= pivote.promedio]
+        menores = [x for x in lista[1:] if x.promedio < pivote.promedio]
+        return quicksort_descendente(mayores) + [pivote] + quicksort_descendente(menores)
 
 
 class Concurso:
@@ -68,6 +88,7 @@ class Concurso:
     def __init__(self):
         self.participantes = {} #Diccionario vacio de participantes
         self.cargar_bandas()
+        self.cargar_puntajes()
 
     def cargar_bandas(self):
         try:
@@ -84,6 +105,34 @@ class Concurso:
             print("Archivo no encontrado")
         except Exception as e:
             print(f"Error al cargar bandas: {e}")
+
+    def cargar_puntajes(self):
+        try:
+            with open("Puntajes.txt", "r", encoding="utf-8") as archivo:
+                for linea in archivo:
+                    partes = linea.strip().split(",")
+                    if len(partes) == 6:
+                        ficha = partes[0] #El Id es el primer dato
+                        puntajes = list(map(int, partes[1:])) #Se elimina y los demas ya son puntajes
+                        if ficha in self.participantes:
+                            self.participantes[ficha].set_puntajes(*puntajes)
+                        else:
+                            print(f"Ficha no encontrada: {ficha}")
+                    else:
+                        print(f"Línea mal formada: {linea}")
+            print("Puntajes cargados correctamente")
+        except FileNotFoundError:
+            print("Archivo de puntajes no encontrado")
+        except Exception as e:
+            print(f"Error al cargar puntajes: {e}")
+
+    def guardar_puntajes(self):
+        with open("Puntajes.txt", "w", encoding="utf-8") as archivo:
+            for ficha, banda in self.participantes.items():
+                p = banda.get_puntajes()
+                linea = f"{ficha},{p['ritmo']},{p['uniformidad']},{p['coreografia']},{p['alineacion']},{p['puntualidad']}\n"
+                archivo.write(linea)
+        print("Puntajes guardados en archivo")
 
     def guardar_bandas(self):
         with open("Bandas.txt", "w", encoding="utf-8") as archivo:
@@ -119,8 +168,11 @@ class Concurso:
         else:
             return False
 
+    def nombre_banda(self, id):
+        return self.participantes[id].get_nombre()
 
+    def ranking(self):
+        lista_banda = list(self.participantes.values())
+        bandas_ordenadas_prom = quicksort_descendente(lista_banda)
+        return bandas_ordenadas_prom #retorna el listado de bandas segun su promedio
 
-    def listar_bandas(self):
-        for ficha, banda in self.participantes.items():
-            print(banda) #Imprime el objeto banda
